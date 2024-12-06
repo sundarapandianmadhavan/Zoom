@@ -1,14 +1,15 @@
-# Use the correct OpenJDK base image
-FROM openjdk:8u151-jdk-alpine3.7
+# Use the correct Tomcat base image
+FROM tomcat:9.0-jdk8-adoptopenjdk-hotspot
 
 # Expose port 8080 to allow external access to the application
 EXPOSE 8080
 
 # Set the working directory for the application
-WORKDIR /usr/src/app
+WORKDIR /usr/local/tomcat/webapps
 
-# Copy the application JAR file into the container
-COPY target/memoryref.jar app.jar
+# Copy the WAR file into the webapps directory of Tomcat
+COPY target/ZoomCustomer-0.0.1.war ./ROOT.war
 
-# Use ENTRYPOINT to run the JAR file as the container's main process
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Start the Tomcat server
+CMD ["catalina.sh", "run"]
+
